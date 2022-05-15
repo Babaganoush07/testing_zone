@@ -1,4 +1,4 @@
-# Project Name
+# Testing Zone
 > It's just a place to save all my dumb ideas.
 
 ## Table of Contents
