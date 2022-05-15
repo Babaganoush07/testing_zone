@@ -1,3 +1,12 @@
+/*
+Hardware that I used:
+TTGO T-Display that has a built in TFT display
+Photo Transister through a 10K Ω Resistor
+Red LED through a 220Ω Resistor
+Tactile Button switch (6mm)
+22 awg wire
+*/
+
 #include <TFT_eSPI.h>
 TFT_eSPI tft = TFT_eSPI();
 
