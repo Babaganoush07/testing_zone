@@ -17,7 +17,8 @@ int r = 0;
 int g = 0;
 int b = 255;
 
-
+// DRAW A TOGGLE SWITCH
+// NEEDS AN X AND A Y AND THE STATE
 void toggleSwitch(int x=0, int y=0, bool b=false){
   tft.fillRoundRect(x, y, 25, 15, 7, TFT_LIGHTGREY);
   tft.drawRoundRect(x, y, 25, 15, 7, TFT_WHITE);
