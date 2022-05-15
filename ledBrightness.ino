@@ -29,8 +29,8 @@ void toggleSwitch(int x=0, int y=0, bool b=false){
   }else{
     tft.fillCircle(x+17, y+7, 6, TFT_GREEN);
     tft.drawString(" ON", x-28, y, 2);
-  }
-}
+  } // END IF ELSE
+} // END toggleSwitch()
 
 void setup() {
   Serial.begin(9600);
@@ -62,7 +62,7 @@ void loop() {
     Serial.println("The button is pressed");
     showVolts = !showVolts;
     toggleSwitch(104, 215, showVolts);
-  }
+  } // END IF
 
   // READ THE PHOTO TRANSISTOR AND SET ALL THE VARIABLES BASED ON THE READING
   int analogValue = analogRead(LIGHT_SENSOR_PIN);    // reads the input on analog pin (value between 0 and 4095)
@@ -82,7 +82,7 @@ void loop() {
   }else{
     tft.drawString("         ", 0, 45, 2);
     tft.drawString("       ", 0, 60, 2);
-  }
+  } // END IF ELSE
 
   // DRAW METER BOX, BLANK OUT THE BAR, SET THE COLOR AND REDRAW IT
   tft.drawRect(1, 75, 133, 19, TFT_WHITE);
