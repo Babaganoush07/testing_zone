@@ -33,3 +33,4 @@ I plan on continuing to add things to this so I can get better and so I don't ju
 
 ## Acknowledgements
 - Got the README template from [ritaly](https://github.com/ritaly/README-cheatsheet).
+- Learned a lot from [VolosR](https://github.com/VolosR) and his [YouTube](https://www.youtube.com/c/VolosProjects).
