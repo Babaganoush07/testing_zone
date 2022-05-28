@@ -1,3 +1,9 @@
+/*
+Using a TTGO T-Display
+a DHT22
+Used the sprite class to reduce the flashing caused by updating graphics
+*/
+
 #include <DHT.h>
 #include <TFT_eSPI.h>
 
@@ -60,4 +66,4 @@ void drawThermometer(int temp){
   //DRAW THE SPRITE TO THE SCREEN, THEN DELETE IT TO SAVE MEMORY
   spr.pushSprite(0,0);
   spr.deleteSprite();
-}
+} // END drawThermometer()
