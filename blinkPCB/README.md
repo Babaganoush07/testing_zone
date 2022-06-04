@@ -24,4 +24,4 @@
 
 ## Acknowledgements
 - Got the README template from [ritaly](https://github.com/ritaly/README-cheatsheet).
-- Learned a lot from [VolosR](https://github.com/VolosR) and his [YouTube](https://www.youtube.com/c/VolosProjects).
+- Learned a lot from [Delali](https://www.youtube.com/c/Delali)'s videos.
