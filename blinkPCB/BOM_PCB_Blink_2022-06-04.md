@@ -1,4 +1,4 @@
-|ID	Name	Designator	Footprint	Quantity	Manufacturer Part	Manufacturer	Supplier	Supplier Part	Price
+| ID | Name | Designator	Footprint	Quantity	Manufacturer Part	Manufacturer	Supplier	Supplier Part	Price
 |--|
 |1"	"1025-7"	"BT1"	"BAT-TH_KEYSTONE-1025-7"	"1"	"1025-7"	"Keystone"	"LCSC"	"C238061"	"1.884"
 |2"	"L-314YD"	"L1,L2,L3"	"LED-TH_BD4.0-P2.50-RD"	"3"	"L-314YD"	"PARALIGHT(台湾光鼎)"	"LCSC"	"C2895167"	"0.044"
