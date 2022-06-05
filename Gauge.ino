@@ -4,14 +4,25 @@
 #define DHTPIN 17
 #define DHTTYPE DHT22
 
-#define BUTTON_PIN 26
-int button_state;       // the current state of button
-int last_button_state;  // the previous state of button
-bool showTemp = true;
-
 TFT_eSPI tft = TFT_eSPI();
 TFT_eSprite spr = TFT_eSprite(&tft);
 DHT dht(DHTPIN, DHTTYPE);
+
+#define tempButton 26
+int tempButtonState;       // the current state of button
+int lastTempButtonState;   // the previous state of button
+bool showTemp = true;
+
+#define batteryButton 35      // Pin 35 is the button on the right
+int batteryButtonState;       // the current state of button
+int lastBatteryButtonState;   // the previous state of button
+
+const int pwmFreq = 5000;
+const int pwmResolution = 8;
+const int pwmLedChannelTFT = 0;
+
+int backlight[5] = {10,30,60,120,220};
+byte b=2;
 
 // Setup for dial
 int centerX = 135/2;
@@ -34,25 +45,45 @@ void setup() {
   tft.begin();
   tft.fillScreen(TFT_BLACK);
 
-  pinMode(BUTTON_PIN, INPUT_PULLUP);
-  button_state = digitalRead(BUTTON_PIN);
+  pinMode(tempButton, INPUT_PULLUP);
+  tempButtonState = digitalRead(tempButton);
+
+  pinMode(batteryButton, INPUT_PULLUP);
+  batteryButtonState = digitalRead(batteryButton);
+
+  ledcSetup(pwmLedChannelTFT, pwmFreq, pwmResolution);
+  ledcAttachPin(TFT_BL, pwmLedChannelTFT);
+  ledcWrite(pwmLedChannelTFT, backlight[b]);
 }
 
 void loop(void) {
+  // MILLIS timer in place of delay
   if(millis() - start >= waitPeriod){
     temp = dht.readTemperature(true);
     rh = dht.readHumidity();
     start = millis();
   } // END millis timer
 
-  // GET THE BUTTON STATE
-  last_button_state = button_state;
-  button_state = digitalRead(BUTTON_PIN);
+  // GET THE BUTTON STATES
+  lastTempButtonState = tempButtonState;
+  tempButtonState = digitalRead(tempButton);
+
+  lastBatteryButtonState = batteryButtonState;
+  batteryButtonState = digitalRead(batteryButton);
   
-  // IF IT CHANGED THEN DO SOMETHING
-  if (last_button_state == HIGH && button_state == LOW) {
+  // IF TEMPERATURE BUTTON STATE CHANGED THEN DO SOMETHING
+  if (lastTempButtonState == HIGH && tempButtonState == LOW) {
     showTemp = !showTemp;
-    //toggleSwitch(104, 215, showVolts);
+  } // END IF
+
+  // IF BATTERY BUTTON STATE CHANGED THEN DO SOMETHING
+  if (lastBatteryButtonState == HIGH && batteryButtonState == LOW) {
+    b++;
+    if(b>4)
+    b=0;
+    for(int i=0;i<b+1;i++){
+      ledcWrite(pwmLedChannelTFT, backlight[b]);}
+    //show_battery()
   } // END IF
   
   drawDial(temp, rh);
@@ -90,7 +121,7 @@ void drawDial(float temp, float rh){
         break;
     } // END Switch
   } // END loop for tick marks
-
+  
   // Draw two rings for outer circles
   spr.drawCircle(centerX,centerY,r,TFT_WHITE);
   spr.drawCircle(centerX,centerY,r+1,TFT_WHITE);
@@ -108,8 +139,7 @@ void drawDial(float temp, float rh){
   x3 = centerX + (r-10) * cos(drad);
   y3 = centerY + (r-10) * sin(drad);
   spr.drawLine(centerX, centerY, x3, y3, TFT_BLUE);
-  
-  
+    
   // Draw dot in the middle
   spr.fillCircle(centerX,centerY,2,TFT_WHITE);
 
@@ -135,4 +165,4 @@ void drawDial(float temp, float rh){
   
   spr.deleteSprite();
   ball ++;
-}
+} // END drawDial(temp, rh)
