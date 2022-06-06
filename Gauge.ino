@@ -13,10 +13,7 @@ int tempButtonState;       // the current state of button
 int lastTempButtonState;   // the previous state of button
 bool showTemp = true;
 
-#define batteryButton 35      // Pin 35 is the button on the right
-int batteryButtonState;       // the current state of button
-int lastBatteryButtonState;   // the previous state of button
-
+#define ALS_PT19 33
 const int pwmFreq = 5000;
 const int pwmResolution = 8;
 const int pwmLedChannelTFT = 0;
@@ -48,12 +45,8 @@ void setup() {
   pinMode(tempButton, INPUT_PULLUP);
   tempButtonState = digitalRead(tempButton);
 
-  pinMode(batteryButton, INPUT_PULLUP);
-  batteryButtonState = digitalRead(batteryButton);
-
   ledcSetup(pwmLedChannelTFT, pwmFreq, pwmResolution);
   ledcAttachPin(TFT_BL, pwmLedChannelTFT);
-  ledcWrite(pwmLedChannelTFT, backlight[b]);
 }
 
 void loop(void) {
@@ -67,24 +60,16 @@ void loop(void) {
   // GET THE BUTTON STATES
   lastTempButtonState = tempButtonState;
   tempButtonState = digitalRead(tempButton);
-
-  lastBatteryButtonState = batteryButtonState;
-  batteryButtonState = digitalRead(batteryButton);
   
   // IF TEMPERATURE BUTTON STATE CHANGED THEN DO SOMETHING
   if (lastTempButtonState == HIGH && tempButtonState == LOW) {
     showTemp = !showTemp;
   } // END IF
 
-  // IF BATTERY BUTTON STATE CHANGED THEN DO SOMETHING
-  if (lastBatteryButtonState == HIGH && batteryButtonState == LOW) {
-    b++;
-    if(b>4)
-    b=0;
-    for(int i=0;i<b+1;i++){
-      ledcWrite(pwmLedChannelTFT, backlight[b]);}
-    //show_battery()
-  } // END IF
+  int alsAnalogValue = analogRead(ALS_PT19);
+  int brightness = alsAnalogValue / 16;
+  Serial.println(alsAnalogValue);
+  ledcWrite(pwmLedChannelTFT, brightness);
   
   drawDial(temp, rh);
 }
@@ -126,19 +111,22 @@ void drawDial(float temp, float rh){
   spr.drawCircle(centerX,centerY,r,TFT_WHITE);
   spr.drawCircle(centerX,centerY,r+1,TFT_WHITE);
 
-  // Draw the temp needle
-  float ddeg = temp -180.0;
-  float drad = ddeg * 2.0 * 3.142 / 360.0;
-  float x3 = centerX + (r-10) * cos(drad);
-  float y3 = centerY + (r-10) * sin(drad);
-  spr.drawLine(centerX, centerY, x3, y3, TFT_RED);
-
-  // Draw the temp needle
-  ddeg = rh -180.0;
-  drad = ddeg * 2.0 * 3.142 / 360.0;
-  x3 = centerX + (r-10) * cos(drad);
-  y3 = centerY + (r-10) * sin(drad);
-  spr.drawLine(centerX, centerY, x3, y3, TFT_BLUE);
+  if(showTemp){
+    // Draw the temp needle
+    float ddeg = temp -180.0;
+    float drad = ddeg * 2.0 * 3.142 / 360.0;
+    float x3 = centerX + (r-10) * cos(drad);
+    float y3 = centerY + (r-10) * sin(drad);
+    spr.drawLine(centerX, centerY, x3, y3, TFT_RED);
+  }else{
+    // Draw the RH needle
+    float ddeg = rh -180.0;
+    float drad = ddeg * 2.0 * 3.142 / 360.0;
+    float x3 = centerX + (r-10) * cos(drad);
+    float y3 = centerY + (r-10) * sin(drad);
+    spr.drawLine(centerX, centerY, x3, y3, TFT_BLUE);
+  }
+  
     
   // Draw dot in the middle
   spr.fillCircle(centerX,centerY,2,TFT_WHITE);
@@ -154,8 +142,8 @@ void drawDial(float temp, float rh){
   }
 
   //move the ball
-  ddeg = ball;
-  drad = ddeg * 2.0 * 3.142 / 360.0;
+  float ddeg = ball;
+  float drad = ddeg * 2.0 * 3.142 / 360.0;
   float x5 = centerX + (r-10) * cos(drad);
   float y5 = centerY + (r-10) * sin(drad);
   spr.fillCircle(x5, y5, 2, TFT_BLUE);
