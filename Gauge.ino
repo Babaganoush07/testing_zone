@@ -68,14 +68,14 @@ void loop(void) {
 
   int alsAnalogValue = analogRead(ALS_PT19);
   int brightness = alsAnalogValue / 16;
-  Serial.println(alsAnalogValue);
+  Serial.println(brightness);
   ledcWrite(pwmLedChannelTFT, brightness);
   
   drawDial(temp, rh);
 }
 
 void drawDial(float temp, float rh){
-  spr.createSprite(135, 240);
+  spr.createSprite(135, 280);
   spr.fillSprite(TFT_BLACK);
   // Draw the tick marks and numbers
   for (float ddeg = -180.0; ddeg < 360.0; ddeg += 15.0) {
@@ -135,10 +135,12 @@ void drawDial(float temp, float rh){
   spr.setTextDatum(MC_DATUM);
   if(showTemp){
     spr.setTextColor(TFT_RED);
-    spr.drawNumber(int(temp), centerX, centerY + 90, 4);
+    spr.drawString("Temp", centerX, centerY + 90, 4); 
+    spr.drawNumber(int(temp), centerX, centerY + 120, 4);
   }else{
     spr.setTextColor(TFT_BLUE);
-    spr.drawNumber(int(rh), centerX, centerY + 90, 4);
+    spr.drawString("Humidity", centerX, centerY + 90, 4);
+    spr.drawNumber(int(rh), centerX, centerY + 120, 4);
   }
 
   //move the ball
