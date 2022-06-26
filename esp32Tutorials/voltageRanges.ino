@@ -7,8 +7,6 @@ int potValue;
 float voltage;
 
 void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
   for(int i = 21; i <= 23; i++){
     pinMode(i, OUTPUT);
   } // END for pinMode
