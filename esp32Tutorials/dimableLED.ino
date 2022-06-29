@@ -15,6 +15,8 @@ void setup() {
 
 void loop() {
   potValue = analogRead(potPIN);
-  brightness = (255. / 4095.) * potValue;
+  //brightness = potValue / 16;                 // What I came up with, 4095 / 255 = 16
+  //brightness = (255. / 4095.) * potValue;     // The Paul McWhorter way
+  brightness = map(potValue, 0, 4095, 0, 255);  // Using the map function
   ledcWrite(channel, brightness);
 } // END loop()
